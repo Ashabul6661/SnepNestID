@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SnepNest — Stabilitas Maksimal</title>
+  <meta name="description" content="SnepNest — tripod ringkas, kokoh, dan serba guna untuk kreator modern." />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --anti-white: #EFEFEF;
+      --lemon-lime: #EBFF40;
+      --dark-green: #203627;
+      --sky-blue: #9DC4D5;
+
+      --max-width: 1200px;
+      --radius: 14px;
+      --shadow: 0 6px 20px rgba(32,54,39,0.12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg, rgba(239,239,239,1) 0%, rgba(157,196,213,0.02) 100%);
+      color:var(--dark-green);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+    }
+
+    a{color:inherit; text-decoration:none}
+    img{max-width:100%; display:block}
+
+    /* Container */
+    .wrap{max-width:var(--max-width); margin:0 auto; padding:0 20px}
+
+    /* Topbar */
+    .topbar{height:68px; display:flex; align-items:center; justify-content:center; position:sticky; top:0; z-index:30; backdrop-filter: blur(6px); background:rgba(255,255,255,0.55); border-bottom:1px solid rgba(32,54,39,0.06)}
+    .logo{font-weight:800; letter-spacing:2px; font-size:20px}
+    .topbar {
+  width: 100%;
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.25); /* opsional */
+  backdrop-filter: blur(8px);      /* opsional */
+}
+
+.logo-img {
+  height: 42px;          /* sesuaikan dengan ukuran logo */
+  width: auto;
+  object-fit: contain;
+}
+
+
+    /* HERO */
+    .hero{position:relative; border-radius:var(--radius); overflow:hidden; margin:28px 0}
+    .hero .bg{width:100%; height:460px; object-fit:cover; display:block}
+    .hero .hero-overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:36px}
+    .hero .hero-text{
+      max-width:820px; text-align:center; color:#fff; font-weight:700; text-shadow:0 8px 30px rgba(0,0,0,0.45);
+    }
+    .hero h1{font-size:48px; margin:0 0 10px}
+    .hero p{font-size:18px; margin:0; font-weight:500}
+
+    /* Make a blurred backing for text (to avoid solid color backgrounds) */
+    .text-backdrop{
+      display:inline-block; padding:18px 28px; border-radius:10px; background:rgba(0,0,0,0.18);
+      backdrop-filter: blur(8px) saturate(120%);
+    }
+
+    /* FEATURE CAROUSEL */
+    .features{margin:30px 0 14px}
+    .section-title{text-align:center; font-size:20px; margin:10px 0 22px; font-weight:700}
+    .carousel{
+      position:relative; overflow:hidden; padding:10px 8px;
+    }
+    .track{display:flex; gap:18px; transition:transform .45s cubic-bezier(.2,.9,.3,1);}
+    .card{min-width:calc((100% - 36px)/3); background:var(--anti-white); border-radius:14px; padding:14px; box-shadow:var(--shadow); cursor:pointer;}
+    .card img{border-radius:10px; display:block}
+    .card h3{font-size:16px; margin:12px 0 6px}
+    .card p{font-size:14px; margin:0; color:rgba(32,54,39,0.75)}
+
+    /* carousel controls */
+    .controls{position:absolute; right:12px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:12px}
+    .dot-btn{width:44px; height:44px; border-radius:50%; border:1px solid rgba(32,54,39,0.08); background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; box-shadow:0 6px 16px rgba(32,54,39,0.06)}
+
+    /* Modal */
+    #modalTitle {
+  color: #EBFF40;
+}
+#modalDesc {
+  color: #EBFF40;
+}
+.modal-info p,
+.modal-info p strong {
+  color: #EBFF40;
+}
+
+    .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:60}
+    .modal.show{display:flex}
+    .modal-backdrop{position:absolute; inset:0; background:rgba(8,10,10,0.5);}
+    .modal-card{position:relative; width:92%; max-width:980px; max-height:88vh; overflow:auto; border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.02)); padding:18px; box-shadow:0 10px 40px rgba(0,0,0,0.5); z-index:62}
+    .modal-row{display:grid; grid-template-columns:1fr 360px; gap:18px}
+    .modal-card img{width:100%; height:100%; object-fit:cover; border-radius:10px}
+    .modal-info h3{margin:0 0 8px}
+    .modal-info p{margin:0 0 16px}
+    .close-btn{position:absolute; right:12px; top:12px; background:var(--lemon-lime); border:none; width:44px; height:44px; border-radius:10px; cursor:pointer}
+
+    /* Testimonials */
+    .testimonials{margin:36px 0}
+    .test-card{display:flex; gap:14px; align-items:center; padding:18px; border-radius:12px; backdrop-filter:blur(8px); background:rgba(255,255,255,0.18);}
+    .avatar{width:64px; height:64px; border-radius:50%; overflow:hidden; flex-shrink:0; box-shadow:0 6px 18px rgba(32,54,39,0.12)}
+    .quote{font-size:16px; font-weight:500}
+    .author{font-size:14px; color:rgba(32,54,39,0.7); margin-top:6px}
+
+    /* CTA */
+    .cta{margin:28px 0; border-radius:14px; padding:28px; display:flex; align-items:center; justify-content:space-between; gap:16px; background:linear-gradient(90deg,var(--lemon-lime), var(--dark-green)); color:var(--dark-green);}
+    .cta h2{margin:0; font-size:20px}
+    .cta .btn{background:#fff; border-radius:12px; padding:12px 18px; font-weight:700; border:none; cursor:pointer}
+
+    /* Footer */
+    footer{margin-top:30px; padding:30px 0; color:rgba(32,54,39,0.8)}
+    .footer-grid{display:flex; justify-content:space-between; align-items:center; gap:12px}
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .hero .bg{height:420px}
+      .card{min-width:calc((100% - 18px)/2)}
+      .modal-row{grid-template-columns:1fr 300px}
+    }
+    @media (max-width:680px){
+      .hero .bg{height:340px}
+      .hero h1{font-size:32px}
+      .card{min-width:80%;}
+      .controls{right:8px}
+      .modal-row{grid-template-columns:1fr}
+      .modal-card{padding:12px}
+      .cta{flex-direction:column; text-align:center}
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+  <img src="assets/logo.png" alt="SnepNest Logo" class="logo-img" />
+</header>
+
+
+  <main class="wrap">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Hero SnepNest">
+      <!-- Replace hero.jpg with your image in /assets/hero.jpg -->
+      <img src="assets/hero.jpg" alt="SnepNest hero" class="bg" onerror="this.style.background='#203627'">
+      <div class="hero-overlay">
+        <div class="hero-text text-backdrop">
+          <h1>SnepNest</h1>
+          <p>Didesain untuk kreator aktif, SnepNest memberikan stabilitas tinggi, fleksibilitas penuh, dan fitur modern untuk menghasilkan konten yang lebih profesional</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" aria-label="Fitur SnepNest">
+      <div class="section-title">Fitur Unggulan</div>
+
+      <div class="carousel" id="carousel">
+        <div class="track" id="track">
+
+          <!-- CARD TEMPLATE x5 -->
+          <article class="card" data-title="Dilengkapi dengan remot Bluetooth" data-desc="Kendalikan kamera atau smartphone tanpa harus menyentuh perangkat. Remote Bluetooth bawaan memberikan respons cepat dan stabil, ideal untuk selfie, vlogging, ataupun pengambilan gambar jarak jauh. Dengan fitur ini, kamu bisa menjaga framing tetap rapi tanpa goyangan tangan." data-img="assets/feature1.jpg">
+            <img src="assets/feature1.jpg" alt="Remote Bluetooth"/>
+            <h3>Bluetooth Remote</h3>
+            <p>Kontrol kamera dari jarak jauh.</p>
+          </article>
+
+          <article class="card" data-title="Holder fleksibel hingga 360 derajat" data-desc="Holder berputar 360° memungkinkan kamu menyesuaikan sudut kamera secara presisi — portrait, landscape, low-angle, high-angle, semuanya bisa dilakukan dalam hitungan detik. Fleksibilitas penuh ini memberi kebebasan maksimal untuk eksplorasi sudut kreatif." data-img="assets/feature2.jpg">
+            <img src="assets/feature2.jpg" alt="Holder Fleksibel 360°"/>
+            <h3>Holder Fleksibel 360°</h3>
+            <p>Bebas atur sudut hingga 360°.</p>
+          </article>
+
+          <article class="card" data-title="Desain Lipat & Portable" data-desc="Dirancang untuk mobilitas tinggi, tripod dapat dilipat menjadi ukuran ringkas sehingga mudah dimasukkan ke dalam tas. Bobotnya ringan namun tetap kokoh, menjadikannya pilihan ideal untuk traveling, shooting outdoor, dan pemakaian harian tanpa ribet." data-img="assets/feature3.jpg">
+            <img src="assets/feature3.jpg" alt="Desain Lipat & Portable"/>
+            <h3>Desain Lipat & Portable</h3>
+            <p>Mudah dibawa & hemat ruang.</p>
+          </article>
+
+          <article class="card" data-title="Tinggi Hingga 180 cm" data-desc="Tripod ini dapat diperpanjang hingga 180 cm, memberi fleksibilitas untuk mengambil gambar dari sudut tinggi maupun rendah. Pengaturan ketinggian yang halus memastikan stabilitas tetap terjaga di semua posisi, sangat cocok untuk kebutuhan konten profesional." data-img="assets/feature4.jpg">
+            <img src="assets/feature4.jpg" alt="Tinggi Hingga 180 cm"/>
+            <h3>Tinggi Hingga 180 cm</h3>
+            <p>Mudah diatur hingga 180 cm untuk menyesuaikan posisi terbaik.</p>
+          </article>
+
+          <article class="card" data-title="Pilihan lampu multi-warna" data-desc="Dilengkapi lampu dengan pilihan berbagai warna, kamu bisa menyesuaikan tone pencahayaan sesuai mood konten yang ingin dibuat. Sangat membantu untuk foto produk, video kreatif, atau streaming dengan atmosfer visual yang lebih menarik dan dinamis." data-img="assets/feature5.jpg">
+            <img src="assets/feature5.jpg" alt="Lampu Multi-Warna"/>
+            <h3>Lampu Multi-Warna</h3>
+            <p>Pilih berbagai warna pencahayaan sesuai kebutuhan.</p>
+          </article>
+
+        </div>
+
+        <div class="controls">
+          <button id="prev" class="dot-btn" aria-label="Geser kiri">◀</button>
+          <button id="next" class="dot-btn" aria-label="Geser kanan">▶</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" aria-label="Testimoni pengguna">
+      <div class="test-card">
+        <div class="avatar"><img src="assets/kahfi.jpg" alt="Kahfi"></div>
+        <div>
+          <div class="quote">“SnepNest beneran stabil banget. Dipakai recording seharian tetap solid!”</div>
+          <div class="author">— Kahfi, Content Creator</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta" role="region" aria-label="Call to action">
+      <h2>Siap Tingkatkan Kualitas Kontenmu?</h2>
+      <button class="btn" id="buyNow">Dapatkan SnepNest Sekarang</button>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-grid">
+        <div>SNEPNEST - Balance. Focus. Capture</div>
+        <div>kontak: by.snepnest@gmail.com &nbsp; • &nbsp; <a href="https://www.instagram.com/by.snepnest?igsh=N2F4c21ndnIwaTU3">Instagram</a></div>
+        <div>© 2025 SnepNest</div>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBack"></div>
+    <div class="modal-card" role="document">
+      <button class="close-btn" id="closeModal" aria-label="Tutup">✕</button>
+      <div class="modal-row">
+        <div class="modal-image"><img src="" alt="detail fitur" id="modalImg"></div>
+        <div class="modal-info">
+          <h3 id="modalTitle"></h3>
+          <p id="modalDesc"></p>
+          <p><strong>Material:</strong> Aluminium alloy</p>
+          <p><strong>Compatibility:</strong> DSLR, Mirrorless, Smartphone</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Basic carousel logic
+    (function(){
+      const track = document.getElementById('track');
+      const cards = Array.from(track.children);
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+
+      let index = 0;
+
+      const update = ()=>{
+        const cardWidth = cards[0].getBoundingClientRect().width + 18;
+        // show 3 cards on desktop, 2 on tablet, 1 on mobile due to min-widths
+        track.style.transform = `translateX(${-(cardWidth * index)}px)`;
+      }
+
+      next.addEventListener('click', ()=>{
+        // prevent overrun
+        index = Math.min(index + 1, cards.length - 3);
+        update();
+      });
+      prev.addEventListener('click', ()=>{
+        index = Math.max(index - 1, 0);
+        update();
+      });
+
+      // drag/ swipe support (basic)
+      let startX = 0, currentX = 0, isDown = false;
+      track.addEventListener('pointerdown', (e)=>{
+        isDown = true; startX = e.clientX; track.style.transition = 'none';
+      });
+      window.addEventListener('pointerup', (e)=>{
+        if(!isDown) return; isDown = false; track.style.transition = '';
+        const dx = e.clientX - startX;
+        if(dx < -60) { index = Math.min(index+1, cards.length-3); }
+        if(dx > 60) { index = Math.max(index-1,0); }
+        update();
+      });
+
+      // open modal on card click
+      const modal = document.getElementById('modal');
+      const modalImg = document.getElementById('modalImg');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalDesc = document.getElementById('modalDesc');
+      const closeModal = document.getElementById('closeModal');
+      const modalBack = document.getElementById('modalBack');
+
+      cards.forEach(c=>{
+        c.addEventListener('click', ()=>{
+          const img = c.dataset.img || '';
+          const title = c.dataset.title || '';
+          const desc = c.dataset.desc || '';
+          modalImg.src = img;
+          modalImg.alt = title;
+          modalTitle.textContent = title;
+          modalDesc.textContent = desc;
+          modal.classList.add('show');
+          modal.setAttribute('aria-hidden','false');
+          document.body.style.overflow = 'hidden';
+        })
+      });
+
+      function close(){
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      }
+      closeModal.addEventListener('click', close);
+      modalBack.addEventListener('click', close);
+      window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') close(); });
+
+      // Smooth scroll for CTA button as demo
+      document.getElementById('buyNow').addEventListener('click', ()=>{
+  window.location.href = 'marketplace.html';
+});
+
+
+      // initial layout update on resize
+      window.addEventListener('resize', ()=>{
+        // recompute index bounds
+        // keep index within safe range
+        if(cards.length <= 3) index = 0;
+        update();
+      });
+
+      // initial call
+      setTimeout(update,100);
+
+    })();
+
+  </script>
+</body>
+</html>

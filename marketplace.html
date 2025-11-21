@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pesan SnepNest — Marketplace Resmi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      margin:0;
+      font-family:Inter, sans-serif;
+      background:#F6F7F8;
+      color:#203627;
+    }
+    .topbar{height:68px; display:flex; align-items:center; justify-content:center; background:#FFFFFFCC; backdrop-filter:blur(8px); border-bottom:1px solid rgba(0,0,0,0.05); position:sticky; top:0; z-index:20;}
+    .logo-img{height:44px;}
+
+    .wrap{max-width:1100px; margin:0 auto; padding:20px;}
+
+    h1{text-align:center; font-size:32px; margin-top:20px;}
+
+    .product-box{
+      background:#fff; padding:24px; border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,0.08);
+      display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:30px;
+    }
+    .product-img{width:100%; border-radius:12px; object-fit:cover;}
+
+    .price{font-size:28px; font-weight:800; margin:10px 0;}
+    .benefit-list li{margin-bottom:10px;}
+
+    .btn-buy{
+      background:#EBFF40; border:none; padding:16px 20px; border-radius:12px; font-size:16px; font-weight:700; cursor:pointer; width:100%; margin-top:20px;
+    }
+
+    footer{text-align:center; padding:30px 0; margin-top:40px; color:#444; font-size:14px;}
+
+    @media(max-width:780px){
+      .product-box{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="topbar">
+  <img src="assets/logo.png" class="logo-img" alt="SnepNest" />
+</header>
+
+<main class="wrap">
+  <h1>Pesan SnepNest Sekarang</h1>
+
+  <div class="product-box">
+    <img src="assets/produk.jpg" class="product-img" alt="SnepNest Product" />
+
+    <div>
+      <h2>SnepNest Tripod Premium</h2>
+      <div class="price">Rp 149.000</div>
+
+      <p>Tripod multifungsi dengan stabilitas tinggi, fleksibilitas 360°, dan tambahan lampu multi-warna — cocok untuk kreator modern.</p>
+
+      <h3>Benefit:</h3>
+      <ul class="benefit-list">
+        <li>Remote Bluetooth responsif</li>
+        <li>Tinggi hingga 180cm</li>
+        <li>Ringkas, ringan, mudah dibawa</li>
+        <li>Holder fleksibel 360°</li>
+        <li>Pencahayaan multi-warna</li>
+      </ul>
+
+      <button class="btn-buy">Checkout Sekarang</button>
+    </div>
+  </div>
+</main>
+
+<footer>© 2025 SnepNest Marketplace</footer>
+
+<script>
+  document.querySelector('.btn-buy').addEventListener('click', () => {
+    window.location.href = 'checkout.html'; 
+  });
+</script>
+
+
+</body>
+</html>
